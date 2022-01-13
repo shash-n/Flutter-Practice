@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
       },
       theme: ThemeData(
         primarySwatch: mainColor,
-        secondaryHeaderColor: mainColor,
+        secondaryHeaderColor: Colors.white,
         textTheme: TextTheme(
           headline1: TextStyle(
             color: mainColor,
@@ -78,6 +78,13 @@ class MyApp extends StatelessWidget {
             color: Colors.white,
             fontSize: 12,
           ),
+          subtitle2: TextStyle(
+            color: mainColor,
+            fontSize: 12,
+          ),
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.black,
         ),
       ),
       home: const Dashboard(
