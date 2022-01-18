@@ -17,6 +17,7 @@ class ListItemDetails extends StatelessWidget {
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme,
         titleSpacing: 0,
+        elevation: 0,
         backgroundColor: Theme.of(context).secondaryHeaderColor,
         title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
@@ -30,7 +31,7 @@ class ListItemDetails extends StatelessWidget {
         ]),
       ),
       body: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.06,
+        height: MediaQuery.of(context).size.height * 0.062,
         child: Card(
           margin: EdgeInsets.zero,
           elevation: 2,
@@ -40,7 +41,8 @@ class ListItemDetails extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
                     child: Row(
                       children: [
                         Icon(
@@ -63,8 +65,7 @@ class ListItemDetails extends StatelessWidget {
                             showDialog(
                                 context: context,
                                 builder: (context) =>
-                                    const ListItemSettingsMenu());
-                            // const ListItemSettingsMenu();
+                                    const ListItemFilterMenu());
                           },
                           icon: Icon(
                             Icons.filter_list_rounded,
@@ -72,7 +73,12 @@ class ListItemDetails extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    const ListItemSettingsMenu());
+                          },
                           icon: Icon(
                             Icons.settings,
                             color: Theme.of(context).primaryColorDark,
