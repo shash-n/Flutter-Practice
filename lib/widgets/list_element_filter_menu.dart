@@ -108,7 +108,7 @@ class _ListItemFilterMenuState extends State<ListItemFilterMenu> {
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                        children: const [
                           OfferCheckbox(),
                           OfferCheckbox(),
                           OfferCheckbox(),
@@ -198,7 +198,7 @@ class _ListItemFilterMenuState extends State<ListItemFilterMenu> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: const [
                     RatingButton(),
                     RatingButton(),
                     RatingButton(),
@@ -228,7 +228,7 @@ class RatingButton extends StatelessWidget {
           TextButton(
               onPressed: () {},
               child: Row(
-                children: [
+                children: const [
                   Icon(Icons.star),
                   Text("1.0"),
                 ],
@@ -259,10 +259,10 @@ class _OfferCheckboxState extends State<OfferCheckbox> {
             value: true,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 7,
         ),
-        Text(
+        const Text(
           "10% off",
           style: TextStyle(
             color: Colors.black,

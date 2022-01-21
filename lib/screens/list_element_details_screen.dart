@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/list_item_filter_menu.dart';
-import '../widgets/list_item_settings_menu.dart';
+import '../widgets/list_element_filter_menu.dart';
+import '../widgets/list_element_settings_menu.dart';
+
+// import '../widgets/list_item.dart';
 
 class ListItemDetails extends StatelessWidget {
   final String title;

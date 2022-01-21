@@ -37,6 +37,7 @@ dependencies:
 
   # User-defined
   pointycastle: ^3.5.0
+  sqflite: ^2.0.2
 
 dev_dependencies:
   flutter_test:

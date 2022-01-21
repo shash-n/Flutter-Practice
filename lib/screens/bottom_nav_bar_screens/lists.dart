@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../widgets/list_item.dart';
+import '../../widgets/list_element.dart';
 
 class Lists extends StatefulWidget {
   const Lists({Key? key}) : super(key: key);

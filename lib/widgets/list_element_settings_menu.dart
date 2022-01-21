@@ -5,6 +5,6 @@ class ListItemSettingsMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog();
+    return const SimpleDialog();
   }
 }
