@@ -41,7 +41,8 @@ class ListDatabaseHelper {
         name TEXT NOT NULL,
         quantity INTEGER NOT NULL,
         price INTEGER NOT NULL,
-        description TEXT NOT NULL )
+        description TEXT NOT NULL,
+        listId INTEGER NOT NULL )
       ''');
   }
 
@@ -50,11 +51,10 @@ class ListDatabaseHelper {
     return await db.insert(
       'lists',
       {
-        // 'id': list.id,
         'name': list.name,
         'type': list.type,
         'totalItems': list.totalItems,
-        'totalAmount': list.totalAmount
+        'totalAmount': list.totalAmount,
       },
     );
   }
@@ -94,7 +94,8 @@ class ListDatabaseHelper {
         'name': item.name,
         'quantity': item.quantity,
         'price': item.price,
-        'description': item.description
+        'description': item.description,
+        'listId': item.listId,
       },
     );
   }

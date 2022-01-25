@@ -16,62 +16,65 @@ class Lists extends StatefulWidget {
 }
 
 class _ListsState extends State<Lists> {
-  final listItems = [];
+  final List<UList> listModelObjects = [];
 
   ListDatabaseHelper listDbHelper = ListDatabaseHelper();
 
+  TextEditingController listNameController = TextEditingController();
+
   _ListsState() {
-    // initialInsertLists();
-    // initialInsertItems();
-    initialFetchLists();
+    initialFetch();
   }
 
-  void initialInsertLists() async {
-    for (int i = 0; i < 5; i++) {
-      UList listModelObject = UList(
-          name: "Home" + i.toString(),
-          type: "Private" + i.toString(),
-          totalItems: 780 * i,
-          totalAmount: 2000 * i);
-      listDbHelper.insertList(listModelObject);
-    }
-  }
-
-  void initialInsertItems() async {
-    for (int i = 0; i < 5; i++) {
-      Item listModelObject = Item(
-          name: "Home " + i.toString(),
-          quantity: i,
-          price: 100 * i,
-          description: "Good item " + i.toString());
-      listDbHelper.insertItem(listModelObject);
-    }
-    // print("Item count: " + (await listDbHelper.queryItemCount()).toString());
-  }
-
-  void initialFetchLists() async {
+  void initialFetch() async {
     final listList = await listDbHelper.queryAllLists();
     for (int i = 0; i < listList.length; i++) {
       UList listModelObject = UList(
+          id: 0,
           name: "--DUMMY--",
           type: "--DUMMY--",
-          totalItems: -1,
-          totalAmount: -1);
-      listModelObject.fromMap(listList[i]);
+          totalItems: 0,
+          totalAmount: 0);
       setState(() {
-        listItems.add(listModelObject);
+        listModelObjects.add(listModelObject);
       });
+      listModelObject.fromMap(listList[i]);
+      calculateListFields(listList[i]['id']);
     }
   }
 
   void addList() async {
-    // String name, String type, int totalItems, int totalAmount) async {
-    UList listModelObject =
-        UList(name: "name", type: "type", totalItems: -1, totalAmount: -1);
+    UList listModelObject = UList(
+        id: 0,
+        name: listNameController.text,
+        type: "type",
+        totalItems: 0,
+        totalAmount: 0);
+    int listId = await listDbHelper.insertList(listModelObject);
+    listModelObject.id = listId;
     setState(() {
-      listItems.add(listModelObject);
+      listModelObjects.add(listModelObject);
     });
-    listDbHelper.insertList(listModelObject);
+    calculateListFields(listId);
+    listNameController.text = "";
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  void calculateListFields(listId) async {
+    List itemList = await listDbHelper.queryAllItems();
+    // print(listModelObjects);
+    for (int i = 0; i < itemList.length; i++) {
+      if (itemList[i]['listId'] == listId) {
+        final listModelObject = listModelObjects
+            .firstWhere((listModelObject) => listModelObject.id == listId);
+        int quantity = itemList[i]['quantity'];
+        int price = itemList[i]['price'];
+        setState(() {
+          listModelObject.totalAmount += price * quantity;
+          listModelObject.totalItems += quantity;
+        });
+      }
+    }
   }
 
   @override
@@ -79,13 +82,14 @@ class _ListsState extends State<Lists> {
     return Scaffold(
       body: Center(
         child: ListView.builder(
-          itemCount: listItems.length,
+          itemCount: listModelObjects.length,
           itemBuilder: (BuildContext context, int index) {
-            return ListItem(
-              cardTitle: listItems[index].name,
-              cardDescription: listItems[index].type,
-              cardTotals: listItems[index].totalItems,
-              cardAmount: listItems[index].totalAmount,
+            return ListElement(
+              listId: listModelObjects[index].id,
+              name: listModelObjects[index].name,
+              type: listModelObjects[index].type,
+              totalItems: listModelObjects[index].totalItems,
+              totalAmount: listModelObjects[index].totalAmount,
             );
           },
         ),
@@ -93,9 +97,18 @@ class _ListsState extends State<Lists> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: addList,
         label: Row(
-            // children: [TextField()],
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.75,
+              child: TextField(
+                decoration: null,
+                controller: listNameController,
+                onEditingComplete: addList,
+              ),
             ),
-        icon: Icon(Icons.add),
+            const Icon(Icons.add)
+          ],
+        ),
       ),
     );
   }

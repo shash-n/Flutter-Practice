@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 
 import '../screens/list_element_details_screen.dart';
 
-class ListItem extends StatelessWidget {
-  final String cardTitle;
-  final String cardDescription;
-  final int cardTotals;
-  final int cardAmount;
+class ListElement extends StatelessWidget {
+  final String name;
+  final String type;
+  final int totalItems;
+  final int totalAmount;
 
-  const ListItem(
+  final int listId;
+
+  const ListElement(
       {Key? key,
-      required this.cardTitle,
-      required this.cardDescription,
-      required this.cardTotals,
-      required this.cardAmount})
+      required this.listId,
+      required this.name,
+      required this.type,
+      required this.totalItems,
+      required this.totalAmount})
       : super(key: key);
 
   @override
@@ -24,8 +27,9 @@ class ListItem extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) => ListItemDetails(
-                    title: cardTitle,
-                    description: cardDescription,
+                    title: name,
+                    description: type,
+                    listId: listId,
                   )),
         );
       },
@@ -48,8 +52,8 @@ class ListItem extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(cardTitle),
-                        Text(cardDescription),
+                        Text(name),
+                        Text(type),
                       ],
                     ),
                     const Image(
@@ -70,8 +74,8 @@ class ListItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Totals: ${cardTotals.toString()}"),
-                    Text("\$" + cardAmount.toString()),
+                    Text("Totals: ${totalItems.toString()}"),
+                    Text("\$" + totalAmount.toString()),
                   ],
                 ),
               ),
