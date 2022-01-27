@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import '../widgets/list_element_filter_menu.dart';
 import '../widgets/list_element_settings_menu.dart';
 
-import '../widgets/list_item.dart';
-
 import '../../utils/list_db_helper.dart';
 
 import '../../models/lists_model.dart';
@@ -15,11 +13,14 @@ class ListItemDetails extends StatefulWidget {
 
   final int listId;
 
+  final Function refreshStateFunction;
+
   const ListItemDetails(
       {Key? key,
       required this.listId,
       required this.title,
-      required this.description})
+      required this.description,
+      required this.refreshStateFunction})
       : super(key: key);
 
   @override
@@ -55,26 +56,50 @@ class _ListItemDetailsState extends State<ListItemDetails> {
     }
   }
 
-  void addItem() async {
-    // String name, int quantity, int price, String description) async {
+  void addItem(
+      String name, String quantity, String price, String description) async {
     Item itemModelObject = Item(
         id: -1,
-        name: "name",
-        quantity: 1,
-        price: 33,
-        description: "description",
+        name: name,
+        quantity: int.parse(quantity),
+        price: int.parse(price),
+        description: description,
         listId: widget.listId);
     int itemId = await listDbHelper.insertItem(itemModelObject);
     itemModelObject.id = itemId;
     setState(() {
       itemModelObjects.add(itemModelObject);
     });
+    incrementListFields(itemModelObject);
+  }
+
+  void incrementListFields(itemModelObject) async {
+    UList listModelObject = UList(
+        id: widget.listId,
+        name: "name",
+        type: "type",
+        totalItems: 0,
+        totalAmount: 0);
+    int quantity = itemModelObject.quantity;
+    int price = itemModelObject.price;
+    listModelObject.totalAmount += price * quantity;
+    listModelObject.totalItems += quantity;
+    listDbHelper.updateListFields(listModelObject);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            widget.refreshStateFunction();
+            Navigator.pop(context);
+          },
+          child: const Icon(
+            Icons.arrow_back,
+          ),
+        ),
         iconTheme: Theme.of(context).iconTheme,
         titleSpacing: 0,
         elevation: 0,
@@ -173,21 +198,127 @@ class _ListItemDetailsState extends State<ListItemDetails> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: addItem,
-        label: Row(
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.75,
-              child: TextField(
-                decoration: null,
-                // controller: listNameController,
-                onEditingComplete: addItem,
-              ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          showModalBottomSheet(
+              context: context,
+              builder: (_) {
+                return ItemForm(addItemFunction: addItem);
+              });
+        },
+      ),
+    );
+  }
+}
+
+class ItemForm extends StatefulWidget {
+  const ItemForm({Key? key, required this.addItemFunction}) : super(key: key);
+
+  final Function addItemFunction;
+
+  @override
+  State<ItemForm> createState() => _ItemFormState();
+}
+
+class _ItemFormState extends State<ItemForm> {
+  final _formKey = GlobalKey<FormState>();
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController quantityController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          TextFormField(
+            decoration: const InputDecoration(
+              labelText: "Name",
             ),
-            const Icon(Icons.add)
-          ],
-        ),
+            controller: nameController,
+          ),
+          TextFormField(
+            decoration: const InputDecoration(
+              labelText: "Quantity",
+            ),
+            controller: quantityController,
+          ),
+          TextFormField(
+            decoration: const InputDecoration(
+              labelText: "Price",
+            ),
+            controller: priceController,
+          ),
+          TextFormField(
+            decoration: const InputDecoration(
+              labelText: "Description",
+            ),
+            controller: descriptionController,
+          ),
+          Container(
+              padding: const EdgeInsets.only(left: 150.0, top: 40.0),
+              child: ElevatedButton(
+                child: const Text('Submit'),
+                onPressed: () {
+                  widget.addItemFunction(
+                      nameController.text,
+                      quantityController.text,
+                      priceController.text,
+                      descriptionController.text);
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  Navigator.pop(context);
+                },
+              )),
+        ],
+      ),
+    );
+  }
+}
+
+class ListItem extends StatelessWidget {
+  final String name;
+  final int quantity;
+  final int price;
+  final String description;
+
+  final int id;
+  final int listId;
+
+  const ListItem(
+      {Key? key,
+      required this.id,
+      required this.name,
+      required this.quantity,
+      required this.price,
+      required this.description,
+      required this.listId})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      margin: const EdgeInsets.all(5),
+      child: Row(
+        children: [
+          Image.asset('assets/images/list_item_placeholder.jpeg'),
+          Column(
+            children: [
+              Text(name),
+              Text(description),
+              Text(quantity.toString()),
+              Text(price.toString()),
+            ],
+          ),
+        ],
       ),
     );
   }

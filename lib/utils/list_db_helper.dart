@@ -71,6 +71,17 @@ class ListDatabaseHelper {
     return await db.delete('lists', where: 'id = ?', whereArgs: [id]);
   }
 
+  Future<int> updateListFields(UList list) async {
+    Database db = await database;
+    return await db.rawUpdate(
+        '''UPDATE lists SET totalItems = totalItems + ?, totalAmount = totalAmount + ? WHERE id = ?''',
+        [
+          '${list.toMap()['totalItems']}',
+          '${list.toMap()['totalAmount']}',
+          '${list.toMap()['id']}'
+        ]);
+  }
+
   Future<List<Map<String, dynamic>>> queryAllLists() async {
     Database db = await database;
     return await db.query('lists');
