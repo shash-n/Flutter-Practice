@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 
-import './bottom_nav_bar.dart';
-import './side_nav_bar.dart';
+import 'bottom_nav_bar/bottom_nav_bar.dart';
+import 'side_nav_bar/side_nav_bar.dart';
 
-import './bottom_nav_bar_screens/home.dart';
-import './bottom_nav_bar_screens/categories.dart';
-import './bottom_nav_bar_screens/vendors.dart';
-import './bottom_nav_bar_screens/lists.dart';
-import './bottom_nav_bar_screens/more.dart';
+import './bottom_nav_bar/home.dart';
+import './bottom_nav_bar/categories.dart';
+import 'bottom_nav_bar/vendors/vendors.dart';
+import './bottom_nav_bar/lists.dart';
+import './bottom_nav_bar/more.dart';
 
-import './side_nav_bar_screens/about_the_app.dart';
-import './side_nav_bar_screens/addresses.dart';
-import './side_nav_bar_screens/faq.dart';
-import './side_nav_bar_screens/household.dart';
-import './side_nav_bar_screens/password.dart';
-import './side_nav_bar_screens/payment_methods.dart';
-import './side_nav_bar_screens/terms_and_conditions.dart';
-import './side_nav_bar_screens/user_info.dart';
-import './side_nav_bar_screens/contact_us.dart';
-import './side_nav_bar_screens/logout.dart';
+import './side_nav_bar/about_the_app.dart';
+import './side_nav_bar/addresses.dart';
+import './side_nav_bar/faq.dart';
+import './side_nav_bar/household.dart';
+import './side_nav_bar/password.dart';
+import './side_nav_bar/payment_methods.dart';
+import './side_nav_bar/terms_and_conditions.dart';
+import './side_nav_bar/user_info.dart';
+import './side_nav_bar/contact_us.dart';
+import './side_nav_bar/logout.dart';
 
 class Dashboard extends StatefulWidget {
   final String username;

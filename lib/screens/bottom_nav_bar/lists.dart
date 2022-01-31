@@ -4,7 +4,7 @@ import '../../utils/list_db_helper.dart';
 
 import '../../models/lists_model.dart';
 
-import '../list_element_details_screen.dart';
+import '../list_details.dart';
 
 class Lists extends StatefulWidget {
   const Lists({Key? key}) : super(key: key);
@@ -133,7 +133,7 @@ class ListElement extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ListItemDetails(
+            builder: (context) => ListDetails(
               title: name,
               description: type,
               listId: listId,

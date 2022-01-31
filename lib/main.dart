@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import './screens/side_nav_bar_screens/about_the_app.dart';
-import './screens/side_nav_bar_screens/addresses.dart';
-import './screens/side_nav_bar_screens/faq.dart';
-import './screens/side_nav_bar_screens/household.dart';
-import './screens/side_nav_bar_screens/password.dart';
-import './screens/side_nav_bar_screens/payment_methods.dart';
-import './screens/side_nav_bar_screens/terms_and_conditions.dart';
-import './screens/side_nav_bar_screens/user_info.dart';
-import './screens/side_nav_bar_screens/contact_us.dart';
-import './screens/side_nav_bar_screens/logout.dart';
+import './models/vendors_cart_model.dart';
+import './models/vendors_catalog_model.dart';
 
 // import './screens/login.dart';
 import './screens/dashboard.dart';
 
 void main() {
-  runApp(const MyApp(Colors.green));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => VendorCartModel()),
+        ChangeNotifierProvider(create: (context) => VendorModel()),
+      ],
+      child: const MyApp(Colors.green),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -28,26 +29,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Sign Up',
       debugShowCheckedModeBanner: false,
-      routes: <String, WidgetBuilder>{
-        '/side_nav_bar_screen/payment_methods': (BuildContext context) =>
-            const PaymentMethods(),
-        '/side_nav_bar_screen/addresses': (BuildContext context) =>
-            const Addresses(),
-        '/side_nav_bar_screen/password': (BuildContext context) =>
-            const Password(),
-        '/side_nav_bar_screen/household': (BuildContext context) =>
-            const Household(),
-        '/side_nav_bar_screen/user_info': (BuildContext context) =>
-            const UserInfo(),
-        '/side_nav_bar_screen/contact_us': (BuildContext context) =>
-            const ContactUs(),
-        '/side_nav_bar_screen/terms_and_conditions': (BuildContext context) =>
-            const TermsAndConditions(),
-        '/side_nav_bar_screen/faq': (BuildContext context) => const FAQ(),
-        '/side_nav_bar_screen/about_the_app': (BuildContext context) =>
-            const AboutTheApp(),
-        '/side_nav_bar_screen/logout': (BuildContext context) => const Logout(),
-      },
       theme: ThemeData(
         primarySwatch: mainColor,
         secondaryHeaderColor: Colors.white,

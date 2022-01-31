@@ -7,7 +7,7 @@ import '../../utils/list_db_helper.dart';
 
 import '../../models/lists_model.dart';
 
-class ListItemDetails extends StatefulWidget {
+class ListDetails extends StatefulWidget {
   final String title;
   final String description;
 
@@ -15,7 +15,7 @@ class ListItemDetails extends StatefulWidget {
 
   final Function refreshStateFunction;
 
-  const ListItemDetails(
+  const ListDetails(
       {Key? key,
       required this.listId,
       required this.title,
@@ -24,15 +24,15 @@ class ListItemDetails extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ListItemDetails> createState() => _ListItemDetailsState();
+  State<ListDetails> createState() => _ListDetailsState();
 }
 
-class _ListItemDetailsState extends State<ListItemDetails> {
+class _ListDetailsState extends State<ListDetails> {
   final List<Item> itemModelObjects = [];
 
   ListDatabaseHelper listDbHelper = ListDatabaseHelper();
 
-  _ListItemDetailsState() {
+  _ListDetailsState() {
     initialFetch();
   }
 
