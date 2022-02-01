@@ -18,9 +18,6 @@ class _VendorsState extends State<Vendors> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: ListView.builder(
         itemCount: 15,
         itemBuilder: (BuildContext context, int index) {

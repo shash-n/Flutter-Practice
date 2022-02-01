@@ -37,7 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   # User-defined
-  pointycastle: ^3.5.0
+  # pointycastle: ^3.5.0
   sqflite: ^2.0.2
   path_provider: ^2.0.8
   http: ^0.13.4

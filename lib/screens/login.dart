@@ -3,28 +3,38 @@ import 'package:flutter/material.dart';
 import 'dashboard.dart';
 
 import 'dart:convert';
-import 'dart:typed_data';
-import 'package:pointycastle/export.dart' as pointy_castle;
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+import 'package:http/http.dart' as http;
 
-  final String title;
+// import 'dart:typed_data';
+// import 'package:pointycastle/export.dart' as pointy_castle;
+
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
+
+  final String title = "Login";
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Login> createState() => _LoginState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  final emailController = TextEditingController(text: "s@s.s");
-  final passwordController = TextEditingController(text: "s@s.s");
+class _LoginState extends State<Login> {
+  final emailController = TextEditingController(text: "");
+  final passwordController = TextEditingController(text: "");
 
   bool _emailInvalid = false;
   bool _passwordInvalid = false;
   String _emailErrorText = "";
   String _passwordErrorText = "";
 
-  void submitData() {
+  static const baseURL =
+      "https://e3-qkmountain.qkinnovations.com/qkm-andermatt-backend/api/";
+  static const postsEndpoint = baseURL + "user/appLogin";
+  int deviceToken = 1;
+  String? deviceType = "A";
+  int categoryId = 2;
+
+  void submitData() async {
     RegExp _emailRegExp = RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z.-]+.[a-zA-Z]+\$");
     RegExp _passwordRegExp = RegExp("^[a-zA-Z0-9!@#%^&*(){};:'\",><.\\/-_]+\$");
 
@@ -66,15 +76,32 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    final sha256Digest = pointy_castle.SHA256Digest();
-    final hashValue = sha256Digest
-        .process(Uint8List.fromList(utf8.encode(passwordController.text)));
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => Dashboard(
-                username: emailController.text,
-                password: hashValue.toString())));
+    final url = Uri.parse(postsEndpoint);
+    final response = await http.post(url,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'email': emailController.text,
+          'password': passwordController.text,
+          'device_token': deviceToken,
+          'device_type': deviceType,
+          'category_id': categoryId
+        }));
+
+    // final sha256Digest = pointy_castle.SHA256Digest();
+    // final hashValue = sha256Digest
+    //     .process(Uint8List.fromList(utf8.encode(passwordController.text)));
+
+    final jsonInfo = jsonDecode(response.body);
+    if (jsonInfo["message"] == "success") {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Dashboard(
+                  username: emailController.text,
+                  password: passwordController.text)));
+    }
   }
 
   @override
@@ -87,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Container(
           height: MediaQuery.of(context).size.height * 0.45,
           padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.height * 0.025),
+              horizontal: MediaQuery.of(context).size.height * 0.02),
           decoration: BoxDecoration(
               border: Border.all(
                 color: Theme.of(context).primaryColorDark,
@@ -119,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: MediaQuery.of(context).size.height * 0.03,
               ),
               Container(
-                width: MediaQuery.of(context).size.width * 0.3,
+                width: MediaQuery.of(context).size.width * 0.7,
                 height: MediaQuery.of(context).size.height * 0.25,
                 padding: EdgeInsets.symmetric(
                     horizontal: MediaQuery.of(context).size.height * 0.03),
@@ -128,9 +155,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextFormField(
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
                         labelText: 'Email',
                         errorText: _emailInvalid ? _emailErrorText : null,
                       ),
@@ -140,10 +171,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       height: MediaQuery.of(context).size.height * 0.02,
                     ),
                     TextFormField(
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
                       obscureText: true,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
                         labelText: 'Password',
                         errorText: _passwordInvalid ? _passwordErrorText : null,
                       ),
