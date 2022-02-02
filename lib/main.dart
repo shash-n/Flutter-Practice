@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './models/vendors_cart_model.dart';
-import './models/vendors_catalog_model.dart';
 
 // import './screens/login.dart';
 import './screens/dashboard.dart';
@@ -12,7 +11,6 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => VendorCartModel()),
-        ChangeNotifierProvider(create: (context) => VendorModel()),
       ],
       child: const MyApp(Colors.green),
     ),

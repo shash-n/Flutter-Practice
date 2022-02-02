@@ -93,8 +93,7 @@ class _LoginState extends State<Login> {
     // final hashValue = sha256Digest
     //     .process(Uint8List.fromList(utf8.encode(passwordController.text)));
 
-    final jsonInfo = jsonDecode(response.body);
-    if (jsonInfo["message"] == "success") {
+    if (response.statusCode == 200) {
       Navigator.push(
           context,
           MaterialPageRoute(

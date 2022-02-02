@@ -10,25 +10,54 @@ class Categories extends StatefulWidget {
 }
 
 class _CategoriesState extends State<Categories> {
+  List<String> dropdownSublist = ['Kotlin', 'Java', 'Flutter'];
+  List<String> dropdownItems = ['Android', 'IOS', 'QA', 'web', 'BA'];
+  String? dropdownValue = '';
+
+  bool isSwitched = false;
+
+  void onDropdownChanged(String? value) {
+    setState(() {
+      dropdownValue = value;
+    });
+  }
+
+  _CategoriesState() {
+    dropdownValue = dropdownItems[0];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.45,
-        padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.height * 0.025),
-        decoration: BoxDecoration(
-            border: Border.all(
-              color: Theme.of(context).primaryColorDark,
-              width: 2,
-            ),
-            borderRadius: const BorderRadius.all(Radius.circular(10))),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(widget.title),
-          ],
-        ),
+      child: Column(
+        children: [
+          DropdownButton<String>(
+            value: dropdownValue,
+            style: TextStyle(color: Theme.of(context).primaryColor),
+            borderRadius: BorderRadius.circular(5.0),
+            items: dropdownItems.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: onDropdownChanged,
+          ),
+          Switch(
+            activeColor: Theme.of(context).primaryColorDark,
+            activeTrackColor: Theme.of(context).primaryColorLight,
+            onChanged: (status) {
+              setState(() {
+                isSwitched = !isSwitched;
+              });
+            },
+            value: isSwitched,
+          ),
+          const LinearProgressIndicator(
+            value: 0.6, //controller.value,
+            semanticsLabel: 'Linear progress indicator',
+          ),
+        ],
       ),
     );
   }

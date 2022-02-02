@@ -1,9 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/vendors_catalog_model.dart';
+import '../../../models/vendors_cart_model.dart';
+
+import '../vendors/vendors_cart.dart';
 
 class Vendors extends StatefulWidget {
   const Vendors({Key? key}) : super(key: key);
@@ -15,86 +15,89 @@ class Vendors extends StatefulWidget {
 }
 
 class _VendorsState extends State<Vendors> {
+  void goToCart() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const VendorsCart()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: 15,
-        itemBuilder: (BuildContext context, int index) {
-          // print(index);
-          return Vendor();
-        },
-      ),
-    );
-  }
-}
-
-class Vendor extends StatefulWidget {
-  final int id = Random().nextInt(10);
-
-  Vendor({Key? key}) : super(key: key);
-
-  @override
-  State<Vendor> createState() => _VendorState();
-}
-
-class _VendorState extends State<Vendor> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).primaryColor,
-      margin: const EdgeInsets.all(20),
-      child: Consumer<VendorModel>(
-        builder: (context, vendorModel, child) {
-          return TextButton(
-            onPressed: vendorModel.changeCartStatus,
-            style: ButtonStyle(
-              elevation: MaterialStateProperty.all<double>(10),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: ColoredBox(
-                    color: vendorModel.color,
+      body: Consumer<VendorCartModel>(
+        builder: (context, cart, child) {
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: cart.getVendorsCount(),
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Theme.of(context).primaryColor,
+                ),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                child: TextButton(
+                  onPressed: () {
+                    cart.changeVendorCartStatus(index);
+                  },
+                  style: ButtonStyle(
+                    elevation: MaterialStateProperty.all<double>(10),
                   ),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        vendorModel.name,
-                        style: const TextStyle(
-                          color: Colors.black,
+                      SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: ColoredBox(
+                          color: cart.getVendorColor(index),
                         ),
                       ),
-                      Text(
-                        vendorModel.price.toString(),
-                        style: const TextStyle(
-                          color: Colors.black,
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              cart.getVendorName(index),
+                              style: const TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                            Text(
+                              cart.getVendorPrice(index).toString(),
+                              style: const TextStyle(
+                                color: Colors.black,
+                              ),
+                            )
+                          ],
                         ),
-                      )
+                      ),
+                      cart.isVendorInCart(index)
+                          ? const Icon(Icons.ice_skating)
+                          : const Text(
+                              "BUY",
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                      const SizedBox(
+                        width: 10,
+                      ),
                     ],
                   ),
                 ),
-                vendorModel.inCart
-                    ? const Icon(Icons.ice_skating)
-                    : const Text(
-                        "BUY",
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-              ],
-            ),
+              );
+            },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: goToCart,
+        label: const Text("Cart"),
+        icon: const Icon(Icons.wallet_giftcard),
       ),
     );
   }
