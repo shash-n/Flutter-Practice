@@ -36,22 +36,22 @@ class _DashboardState extends State<Dashboard> {
   int _sideNavBarSelectedIndex = -1;
   final int bottomScreensCount = 5;
 
-  final screens = [
-    const Home(),
-    const Vendors(),
-    const Lists(),
-    const Categories(),
-    const More(),
-    const PaymentMethods(),
-    const Addresses(),
-    const Password(),
-    const Household(),
-    const UserInfo(),
-    const ContactUs(),
-    const TermsAndConditions(),
-    const FAQ(),
-    const AboutTheApp(),
-    const Logout(),
+  final screens = const [
+    Home(),
+    Vendors(),
+    Lists(),
+    Categories(),
+    More(),
+    PaymentMethods(),
+    Addresses(),
+    Password(),
+    Household(),
+    UserInfo(),
+    ContactUs(),
+    TermsAndConditions(),
+    FAQ(),
+    AboutTheApp(),
+    Logout(),
   ];
 
   final titles = [

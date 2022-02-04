@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import './models/vendors_cart_model.dart';
-
 // import './screens/login.dart';
 import './screens/dashboard.dart';
 
@@ -70,9 +68,7 @@ class MyApp extends StatelessWidget {
       home:
           // const Login(),
           const Dashboard(
-        username: "PlaceholderUsername",
-        password: "PlaceholderPassword",
-      ),
+              username: "PlaceholderUsername", password: "PlaceholderPassword"),
     );
   }
 }

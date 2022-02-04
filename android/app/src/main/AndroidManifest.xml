@@ -34,11 +34,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA--i3yim1Ze3Apcen7DSWyVBlHAhscWIs"/>
     </application>
-    <uses-permission
+    <!-- <uses-permission
         android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission
         android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CAMERA" /> -->
 </manifest>
 
 

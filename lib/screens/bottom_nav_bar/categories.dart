@@ -1,11 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
-
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:location/location.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Categories extends StatefulWidget {
   const Categories({Key? key}) : super(key: key);
@@ -17,10 +14,11 @@ class Categories extends StatefulWidget {
 }
 
 class _CategoriesState extends State<Categories> {
-  late var _image;
+  // ignore: unused_field
+  late XFile? _image;
 
   Future _pickImageFromCamera() async {
-    var image = await ImagePicker()
+    XFile? image = await ImagePicker()
         .pickImage(source: ImageSource.camera, imageQuality: 50);
     setState(() {
       _image = image;
@@ -28,8 +26,8 @@ class _CategoriesState extends State<Categories> {
   }
 
   Future _pickImageFromGallery() async {
-    File image1 = (await ImagePicker()
-        .pickImage(source: ImageSource.gallery, imageQuality: 50)) as File;
+    XFile? image1 = (await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 50));
     setState(() {
       _image = image1;
     });
@@ -39,9 +37,9 @@ class _CategoriesState extends State<Categories> {
   List<String> dropdownItems = ['Android', 'IOS', 'QA', 'web', 'BA'];
   String? dropdownValue = '';
 
-  final LatLng _initialMapLocation = const LatLng(23.1925450, 72.6131467);
-  late GoogleMapController mapController;
-  final Location _location = Location();
+  // final LatLng _initialMapLocation = const LatLng(23.1925450, 72.6131467);
+  // late GoogleMapController mapController;
+  // final Location _location = Location();
 
   bool isSwitched = false;
 
@@ -55,18 +53,18 @@ class _CategoriesState extends State<Categories> {
     dropdownValue = dropdownItems[0];
   }
 
-  void _onMapCreated(GoogleMapController _cntlr) {
-    mapController = _cntlr;
-    _location.onLocationChanged.listen((location) {
-      mapController.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-              target: LatLng(location.latitude!, location.longitude!),
-              zoom: 15),
-        ),
-      );
-    });
-  }
+  // void _onMapCreated(GoogleMapController _controller) {
+  //   mapController = _controller;
+  //   _location.onLocationChanged.listen((location) {
+  //     mapController.animateCamera(
+  //       CameraUpdate.newCameraPosition(
+  //         CameraPosition(
+  //             target: LatLng(location.latitude!, location.longitude!),
+  //             zoom: 15),
+  //       ),
+  //     );
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -99,16 +97,17 @@ class _CategoriesState extends State<Categories> {
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
               child: const AutocompleteBasicName(),
             ),
-            Expanded(
-              child: GoogleMap(
-                onMapCreated: _onMapCreated,
-                initialCameraPosition: CameraPosition(
-                  target: _initialMapLocation,
-                ),
-                mapType: MapType.normal,
-                myLocationButtonEnabled: true,
-              ),
-            ),
+            // Expanded(
+            //   child: GoogleMap(
+            //     onMapCreated: _onMapCreated,
+            //     initialCameraPosition: CameraPosition(
+            //       target: _initialMapLocation,
+            //     ),
+            //     mapType: MapType.normal,
+            //     myLocationButtonEnabled: true,
+            //     myLocationEnabled: true,
+            //   ),
+            // ),
             Switch(
               activeColor: Theme.of(context).primaryColorDark,
               activeTrackColor: Theme.of(context).primaryColorLight,
@@ -119,25 +118,35 @@ class _CategoriesState extends State<Categories> {
               },
               value: isSwitched,
             ),
-            Column(
-              children: [
-                ElevatedButton(
-                    onPressed: _pickImageFromCamera,
-                    child: const ListTile(
-                      leading: Icon(
-                        Icons.camera,
-                      ),
-                      title: Text('Image from camera'),
-                    )),
-                ElevatedButton(
-                    onPressed: _pickImageFromGallery,
-                    child: const ListTile(
-                      leading: Icon(
-                        Icons.roofing,
-                      ),
-                      title: Text('Image from gallery'),
-                    )),
-              ],
+            Container(
+              margin: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  ElevatedButton(
+                      onPressed: _pickImageFromCamera,
+                      child: const ListTile(
+                        leading: Icon(
+                          Icons.camera,
+                        ),
+                        title: Text('Image from camera'),
+                      )),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ElevatedButton(
+                      onPressed: _pickImageFromGallery,
+                      child: const ListTile(
+                        leading: Icon(
+                          Icons.roofing,
+                        ),
+                        title: Text('Image from gallery'),
+                      )),
+                ],
+              ),
+            ),
+            CachedNetworkImage(
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              imageUrl: 'https://picsum.photos/250?image=9',
             ),
           ],
         ),
@@ -148,15 +157,12 @@ class _CategoriesState extends State<Categories> {
 
 class AutocompleteBasicName extends StatelessWidget {
   const AutocompleteBasicName({Key? key}) : super(key: key);
-
   static const List<String> _userOptions = [
     'Alice',
     'Bob',
     'Charlie',
   ];
-
   static String _displayStringForOption(String option) => option;
-
   @override
   Widget build(BuildContext context) {
     return Autocomplete<String>(

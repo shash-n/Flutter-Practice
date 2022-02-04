@@ -13,7 +13,13 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Text("Home"),
+      child: SizedBox(
+        width: 300.0,
+        height: 300.0,
+        child: DecoratedBox(
+          decoration: BoxDecoration(color: Colors.red),
+        ),
+      ),
     );
   }
 }
