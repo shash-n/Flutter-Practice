@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/list_db_helper.dart';
+import '../../../utils/list_db_helper.dart';
 
-import '../../models/lists_model.dart';
+import '../../../models/lists_model.dart';
 
-import '../list_details.dart';
+import 'list_details.dart';
 
 class Lists extends StatefulWidget {
   const Lists({Key? key}) : super(key: key);

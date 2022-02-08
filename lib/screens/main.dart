@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import './models/vendors_cart_model.dart';
+import '../models/vendors_cart_model.dart';
 // import './screens/login.dart';
-import './screens/dashboard.dart';
+// import './screens/dashboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -10,7 +10,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel',
   'High Importance Notifications',
-  // 'This channel is used for important notifications.',
+  description: 'This channel is used for important notifications.',
   importance: Importance.high,
   playSound: true,
 );
@@ -60,6 +60,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  int _counter = 0;
+
   @override
   void initState() {
     super.initState();
@@ -75,7 +77,7 @@ class _MyAppState extends State<MyApp> {
               android: AndroidNotificationDetails(
                 channel.id,
                 channel.name,
-                // channel.description,
+                channelDescription: channel.description,
                 color: Colors.green,
                 playSound: true,
               ),
@@ -106,6 +108,23 @@ class _MyAppState extends State<MyApp> {
         );
       }
     });
+  }
+
+  void showNotification() {
+    setState(() {
+      _counter++;
+    });
+    flutterLocalNotificationsPlugin.show(
+      0,
+      "Testing $_counter",
+      "How are you?",
+      NotificationDetails(
+          android: AndroidNotificationDetails(channel.id, channel.name,
+              channelDescription: channel.description,
+              importance: Importance.high,
+              color: Colors.blue,
+              playSound: true)),
+    );
   }
 
   @override
@@ -153,9 +172,15 @@ class _MyAppState extends State<MyApp> {
           color: Colors.black,
         ),
       ),
-      home:
-          // const Login(),
-          const Dashboard(),
+      home: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: showNotification,
+          tooltip: "Show Notifications",
+          child: const Icon(Icons.add),
+        ),
+      ),
+      //     // const Login(),
+      //     const Dashboard(),
     );
   }
 }

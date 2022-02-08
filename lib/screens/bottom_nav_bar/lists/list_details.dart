@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/list_element_filter_menu.dart';
-import '../widgets/list_element_settings_menu.dart';
+import '../../../widgets/list_element_filter_menu.dart';
+import '../../../widgets/list_element_settings_menu.dart';
 
-import '../../utils/list_db_helper.dart';
+import '../../../../utils/list_db_helper.dart';
 
-import '../../models/lists_model.dart';
+import '../../../../models/lists_model.dart';
 
 class ListDetails extends StatefulWidget {
   final String title;

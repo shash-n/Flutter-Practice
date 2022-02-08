@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'dashboard.dart';
+import '../dashboard/dashboard.dart';
 
-import '../models/user_login_model.dart';
+import '../../models/user_login_model.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
