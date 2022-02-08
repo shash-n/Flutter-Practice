@@ -49,6 +49,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             logoWidgetUsingBuilderController.forward();
           }
         });
+
   late AnimationController logoWidgetStaggeredController = AnimationController(
     duration: const Duration(milliseconds: 2000),
     vsync: this,
@@ -161,7 +162,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Widget animatedLogo() => SizedBox(
         width: logoAnimation.value,
         height: logoAnimation.value,
-        child: const Expanded(child: FlutterLogo()),
+        child: const FlutterLogo(),
       );
 
   @override
@@ -214,7 +215,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
 class AnimatedLogoWidget extends AnimatedWidget {
   static final _opacityTween = Tween<double>(begin: 0, end: 1);
-  static final _sizeTween = Tween<double>(begin: 50, end: 200);
+  static final _sizeTween = Tween<double>(begin: 50, end: 150);
 
   const AnimatedLogoWidget({Key? key, required Animation<double> animation})
       : super(key: key, listenable: animation);
@@ -227,9 +228,7 @@ class AnimatedLogoWidget extends AnimatedWidget {
       child: SizedBox(
         width: _sizeTween.evaluate(animation),
         height: _sizeTween.evaluate(animation),
-        child: const Expanded(
-          child: FlutterLogo(),
-        ),
+        child: const FlutterLogo(),
       ),
     );
   }
