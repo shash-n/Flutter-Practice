@@ -67,8 +67,7 @@ class MyApp extends StatelessWidget {
       ),
       home:
           // const Login(),
-          const Dashboard(
-              username: "PlaceholderUsername", password: "PlaceholderPassword"),
+          const Dashboard(),
     );
   }
 }

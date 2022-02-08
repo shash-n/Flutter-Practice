@@ -21,11 +21,7 @@ import './side_nav_bar/contact_us.dart';
 import './side_nav_bar/logout.dart';
 
 class Dashboard extends StatefulWidget {
-  final String username;
-  final String password;
-
-  const Dashboard({Key? key, required this.username, required this.password})
-      : super(key: key);
+  const Dashboard({Key? key}) : super(key: key);
 
   @override
   State<Dashboard> createState() => _DashboardState();

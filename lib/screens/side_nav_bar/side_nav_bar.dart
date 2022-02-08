@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../models/user_login_model.dart';
+
+import 'profile.dart';
+
 class SideNavBar extends StatefulWidget {
   final ValueChanged<int> updateIndex;
 
@@ -18,43 +22,7 @@ class _SideNavBarState extends State<SideNavBar> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColorDark,
-              ),
-              child: Row(
-                children: [
-                  SizedBox(
-                    height: 60,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      // clipBehavior: ,
-                      child: const Image(
-                        image: AssetImage(
-                            'assets/images/male_photo_placeholder.jpeg'),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Drawer Header',
-                        style: Theme.of(context).textTheme.headline3,
-                      ),
-                      Text(
-                        'Drawer Description',
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            const SideNavBarHeader(),
             ListTile(
               leading: const Icon(Icons.paid),
               minLeadingWidth: 0,
@@ -172,6 +140,57 @@ class _SideNavBarState extends State<SideNavBar> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class SideNavBarHeader extends StatelessWidget {
+  const SideNavBarHeader({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DrawerHeader(
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColorDark,
+      ),
+      child: Row(
+        children: [
+          SizedBox(
+            height: 60,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: GestureDetector(
+                onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(
+                    builder: (context) => const Profile())),
+                child: const Hero(
+                  tag: "user_profile_pic",
+                  child: Image(
+                    image:
+                        AssetImage('assets/images/male_photo_placeholder.jpeg'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 15,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                UserLoginModel.getEmail,
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+              Text(
+                UserLoginModel.getPassword,
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

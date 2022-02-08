@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'dashboard.dart';
 
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
-
-// import 'dart:typed_data';
-// import 'package:pointycastle/export.dart' as pointy_castle;
+import '../models/user_login_model.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -26,13 +21,6 @@ class _LoginState extends State<Login> {
   bool _passwordInvalid = false;
   String _emailErrorText = "";
   String _passwordErrorText = "";
-
-  static const baseURL =
-      "https://e3-qkmountain.qkinnovations.com/qkm-andermatt-backend/api/";
-  static const postsEndpoint = baseURL + "user/appLogin";
-  int deviceToken = 1;
-  String? deviceType = "A";
-  int categoryId = 2;
 
   void submitData() async {
     RegExp _emailRegExp = RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z.-]+.[a-zA-Z]+\$");
@@ -76,30 +64,12 @@ class _LoginState extends State<Login> {
       return;
     }
 
-    final url = Uri.parse(postsEndpoint);
-    final response = await http.post(url,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
-          'email': emailController.text,
-          'password': passwordController.text,
-          'device_token': deviceToken,
-          'device_type': deviceType,
-          'category_id': categoryId
-        }));
-
-    // final sha256Digest = pointy_castle.SHA256Digest();
-    // final hashValue = sha256Digest
-    //     .process(Uint8List.fromList(utf8.encode(passwordController.text)));
-
-    if (response.statusCode == 200) {
+    if (await UserLoginModel.checkLogin(
+        emailController.text, passwordController.text)) {
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Dashboard(
-                  username: emailController.text,
-                  password: passwordController.text)));
+          context, MaterialPageRoute(builder: (context) => const Dashboard()));
+    } else {
+      // print(UserLoginModel.getError);
     }
   }
 
