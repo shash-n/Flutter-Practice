@@ -153,10 +153,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   void startBoxAnim() async {
-    while (true) {
-      await logoWidgetStaggeredController.forward().orCancel;
-      await logoWidgetStaggeredController.reverse().orCancel;
-    }
+    // await logoWidgetStaggeredController.forward().orCancel;
+    // await logoWidgetStaggeredController.reverse().orCancel;
   }
 
   Widget animatedLogo() => SizedBox(

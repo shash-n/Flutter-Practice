@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 // import 'package:location/location.dart';
@@ -14,8 +16,7 @@ class Categories extends StatefulWidget {
 }
 
 class _CategoriesState extends State<Categories> {
-  // ignore: unused_field
-  late XFile? _image;
+  XFile? _image;
 
   Future _pickImageFromCamera() async {
     XFile? image = await ImagePicker()
@@ -144,10 +145,12 @@ class _CategoriesState extends State<Categories> {
                 ],
               ),
             ),
-            CachedNetworkImage(
-              placeholder: (context, url) => const CircularProgressIndicator(),
-              imageUrl: 'https://picsum.photos/250?image=9',
-            ),
+            _image == null
+                ? CachedNetworkImage(
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                    imageUrl: 'https://picsum.photos/250?image=9')
+                : Image.file(File(_image!.path))
           ],
         ),
       ),

@@ -3,8 +3,43 @@ import 'package:provider/provider.dart';
 import './models/vendors_cart_model.dart';
 // import './screens/login.dart';
 import './screens/dashboard.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-void main() {
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'high_importance_channel',
+  'High Importance Notifications',
+  // 'This channel is used for important notifications.',
+  importance: Importance.high,
+  playSound: true,
+);
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('A bg message just showed up: ${message.messageId}');
+}
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
   runApp(
     MultiProvider(
       providers: [
@@ -15,10 +50,63 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final MaterialColor? mainColor;
 
   const MyApp(this.mainColor, {Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                // channel.description,
+                color: Colors.green,
+                playSound: true,
+              ),
+            ));
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print("A new onMessageOpenedApp event was published!");
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if (notification != null && android != null) {
+        showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              title: Text(notification.title.toString()),
+              content: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(notification.body.toString()),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +114,11 @@ class MyApp extends StatelessWidget {
       title: 'Sign Up',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: mainColor,
+        primarySwatch: widget.mainColor,
         secondaryHeaderColor: Colors.white,
         textTheme: TextTheme(
           headline1: TextStyle(
-            color: mainColor,
+            color: widget.mainColor,
             fontSize: 20,
           ),
           headline2: const TextStyle(
@@ -45,7 +133,7 @@ class MyApp extends StatelessWidget {
           ),
           headline4: const TextStyle(),
           bodyText1: TextStyle(
-            color: mainColor,
+            color: widget.mainColor,
             fontSize: 16,
           ),
           bodyText2: const TextStyle(
@@ -57,7 +145,7 @@ class MyApp extends StatelessWidget {
             fontSize: 12,
           ),
           subtitle2: TextStyle(
-            color: mainColor,
+            color: widget.mainColor,
             fontSize: 12,
           ),
         ),

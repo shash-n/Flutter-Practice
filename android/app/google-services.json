@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "521755378124",
+    "project_id": "shash-zignuts-180401",
+    "storage_bucket": "shash-zignuts-180401.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521755378124:android:854f8b26ee886aac0f5d69",
+        "android_client_info": {
+          "package_name": "com.example.widgets_trial_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "521755378124-ggf1fquktvjoohlr97tfc1r9lcsu8o9f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7VIlDYy9K_NY_YrYsos7BG2XTmTVtEUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "521755378124-ggf1fquktvjoohlr97tfc1r9lcsu8o9f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
